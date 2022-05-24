@@ -1,4 +1,4 @@
-me: check-file
+name: check-file
 
 on: [push]
 
