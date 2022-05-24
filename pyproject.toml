@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Aleksandr <nastyavin86@br.ru>"]
 packages = [
-  { include = "page-loader" },
+  { include = "page_loader" },
 ]
 
 [tool.poetry.dependencies]
