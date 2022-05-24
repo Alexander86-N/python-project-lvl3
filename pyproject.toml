@@ -11,6 +11,9 @@ packages = [
 python = "^3.8"
 pytest = "^7.1.2"
 
+[tool.poetry.scripts]
+page-loader = 'page_loader.scripts.page_loader:main'
+
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0.1"
 pytest-cov = "^3.0.0"
