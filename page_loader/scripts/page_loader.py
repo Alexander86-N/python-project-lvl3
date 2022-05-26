@@ -8,12 +8,11 @@ from page_loader.download import download
 def main():
     parser = argparse.ArgumentParser(prog='page-loader',
                                      description='Page loader')
-    parser.add_argument('filepath')
     parser.add_argument('url')
-    parser.add_argument('--output', default='os.getcwd()',
+    parser.add_argument('-o', '--output', default=os.getcwd(),
                         help='sets the program launch directory')
     args = parser.parse_args()
-    print(download(args.filepath, args.url, args.output))
+    print(download(args.url, args.output))
 
 
 if __name__ == '__main__':
