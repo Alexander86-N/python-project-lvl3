@@ -1,20 +1,17 @@
 import pytest
 import requests
-import requests_mock
 
 
-
-@pytest.fixture
-def read_file():
-    result = ''
-    file_name = 'tests/fixtures/loaded.txt'
+@pytest.fixture(params=['tests/fixtures/test_html.html'])
+def read_file(request):
+    file_name = request.param
     with open(file_name) as f:
         result = f.read()
     return result
 
 
 @pytest.fixture
-def make_request(read_file):
-    with requests_mock.Mocker() as mock:
-        mock.get('https://en.wikipedia.org',text=read_file)
-        return requests.get('https://en.wikipedia.org').text
+def make_request(requests_mock, read_file):
+    requests_mock.get('https://en.wikipedia.org', text=read_file,
+                      headers={'content-type': 'text/html'})
+    yield
