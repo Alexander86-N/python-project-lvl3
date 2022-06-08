@@ -18,5 +18,5 @@ def test_download(read_file, requests_mock):
                           headers={'Content-Type': 'all'})
         result = download('https://en.wikipedia.org', temp)
         assert random_path == result
-        assert os.path.isdir(correct_name_dir)
+        assert os.path.exists(correct_name_dir)
         assert os.path.isfile('en-wikipedia_file/-assets-professions-nodejs.png')
