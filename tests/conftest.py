@@ -2,7 +2,7 @@ import pytest
 import requests
 
 
-@pytest.fixture(params=['fixtures/test_html.html'])
+@pytest.fixture(params=['tests/fixtures/test_html.html'])
 def read_file(request):
     file_name = request.param
     with open(file_name) as f:
