@@ -21,12 +21,10 @@ def resource_extraction(url, data, directory):
         else:
             new_url, suffix = highlight_url_and_suffix(addres)
             name = name_formation(new_url, suffix)
-            print(element.attrs[TAGS['type']])
             new_url = f'{url_pars.scheme}://{url_pars.netloc}{addres}'
             element.attrs[TAGS['type']] = f'{directory}/{name}'
             resource_lst.append({'addres': new_url,
                                  'name': element.attrs[TAGS['type']]})
-            print(element.attrs[TAGS['type']])
     return resource_lst, soup.prettify()
 
 
