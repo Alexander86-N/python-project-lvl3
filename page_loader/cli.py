@@ -1,6 +1,7 @@
 import argparse
 import os
 
+
 def make_cli():
     parser = argparse.ArgumentParser(prog='page-loader',
                                      description='Page loader')
