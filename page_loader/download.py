@@ -9,7 +9,8 @@ def download(url, filepath=os.getcwd()):
     data = extraction_data(url)
 
     new_dir = name_formation(url, '_file')
-    os.mkdir(new_dir)
+    if not os.path.exists(new_dir):
+        os.mkdir(new_dir)
 
     urls, text_html = resource_extraction(url, data, new_dir)
     saving_data(text_html, title)
