@@ -3,17 +3,18 @@ from urllib.parse import urlparse
 from page_loader.data_extraction import resource_extraction, extraction_data
 
 
-def download(url, filepath=os.getcwd()):
+def download(url, filepath):
     title = name_formation(url)
     filename = os.path.join(filepath, title)
     data = extraction_data(url)
 
-    new_dir = name_formation(url, '_file')
+    name_dir = name_formation(url, '_file')
+    new_dir = os.path.join(filepath, name_dir)
     if not os.path.exists(new_dir):
         os.mkdir(new_dir)
 
     urls, text_html = resource_extraction(url, data, new_dir)
-    saving_data(text_html, title)
+    saving_data(text_html, filename)
     for url in urls:
         data_url = extraction_data(url['addres'])
         saving_data(data_url, url['name'])
