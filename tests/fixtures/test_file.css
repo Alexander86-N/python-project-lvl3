@@ -1,0 +1,19 @@
+section,
+summary {
+	display: block;
+}
+
+audio:not([controls]) {
+	display: none;
+        height: 0;
+}
+
+a {
+	background-color: transparent;
+}
+
+a:active,
+a:hover {
+        outline: 0;
+}
+
