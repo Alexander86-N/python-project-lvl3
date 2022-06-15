@@ -44,20 +44,20 @@ def make_request(requests_mock,
                  read_file_js,
                  read_file_img):
     requests_mock.get('https://ru.hexlet.io/courses', text=read_file,
-                      headers={'content-type': 'text/html'})
+                      headers={'content-type': 'all'})
     requests_mock.get('https://ru.hexlet.io/assets/professions/nodejs.png',
                       content=read_file_img, headers={'content-type': 'all'})
     requests_mock.get('https://ru.hexlet.io/assets/application.css',
                       content=read_file_css, headers={'content-type': 'all'})
-    requests_mock.get('https://ru.hexlet.io/courses', content=read_file_css,
-                      headers={'content-type': 'all'})
     requests_mock.get('https://ru.hexlet.io/packs/js/runtime.js',
                       content=read_file_js, headers={'content-type': 'all'})
     yield
+
+    assert requests_mock.call_count == 4
 
 
 @pytest.fixture
 def new_dirict():
     with tempfile.TemporaryDirectory() as tmp:
         name_dir = tmp
-        yield
+        yield name_dir
