@@ -33,7 +33,7 @@ def test_download_file_contents(make_request,
 def test_download_number_of_files(make_request):
     with tempfile.TemporaryDirectory() as temp:
         download(addres, temp)
-        list_file = ['ru-hexlet-io-assets-application.css',
+        list_file = ['ru-hexlet-io-packs-js-runtime.js',
                      'ru-hexlet-io-assets-professions-nodejs.png',
-                     'ru-hexlet-io-packs-js-runtime.js']
+                     'ru-hexlet-io-assets-application.css']
         assert os.listdir(correct_name_dir) == list_file
