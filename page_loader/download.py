@@ -9,11 +9,10 @@ def download(url, filepath):
     data = extraction_data(url)
 
     name_dir = name_formation(url, '_file')
-    new_dir = os.path.join(filepath, name_dir)
-    if not os.path.exists(new_dir):
-        os.mkdir(new_dir)
+    if not os.path.exists(name_dir):
+        os.mkdir(name_dir)
 
-    urls, text_html = resource_extraction(url, data, new_dir)
+    urls, text_html = resource_extraction(url, data, name_dir)
     saving_data(text_html, filename)
     for url in urls:
         data_url = extraction_data(url['addres'])
