@@ -22,8 +22,8 @@ def resource_extraction(url, data, directory):
             if resours.netloc and resours.netloc != url_pars.netloc:
                 continue
             else:
-                new_url, suffix = highlight_url_and_suffix(addres)
-                name = name_formation(f'{url_pars.netloc}{new_url}', suffix)
+                suffix = os.path.splitext(addres)[1]
+                name = name_formation(f'{url_pars.netloc}{addres}', suffix)
                 url = f'{url_pars.scheme}://{url_pars.netloc}{resours.path}'
                 element.attrs[tag['type']] = f'{directory}/{name}'
                 resource_lst.append({'addres': url,
@@ -38,15 +38,6 @@ def extraction_data(url):
         return response.text
     else:
         return response.content
-
-
-def highlight_url_and_suffix(url):
-    if "?" in url:
-        position = url.index('?')
-        new_url = url[:position]
-        return new_url, os.path.splitext(new_url)[1]
-    else:
-        return url, os.path.splitext(url)[1]
 
 
 def name_formation(addres, suffix='.html'):
