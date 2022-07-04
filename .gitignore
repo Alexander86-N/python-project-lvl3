@@ -6,3 +6,4 @@ coverage.xml
 .pytest_cache/
 .vim
 tmp/
+.log/
