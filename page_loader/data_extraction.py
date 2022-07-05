@@ -14,6 +14,7 @@ TAGS = [{'tag': 'img', 'type': 'src'},
 
 def resource_extraction(first_url, directory, name_dir):
     data = extraction_data(first_url)
+    url_pars = urlparse(first_url)
     logger.debug('Starting resource extraction.')
     soup = BeautifulSoup(data, 'html.parser')
     for tag in TAGS:
@@ -22,7 +23,6 @@ def resource_extraction(first_url, directory, name_dir):
             if not addres:
                 continue
             resours = urlparse(addres)
-            url_pars = urlparse(first_url)
             if resours.netloc and resours.netloc != url_pars.netloc:
                 logger.debug('Link to another domain.')
                 continue
@@ -47,6 +47,9 @@ def extraction_data(url):
     except requests.RequestException as err:
         logger.error(f'Connection failed: {err}')
         raise ConnectionError('Connection failed')
+    if response.status_code != requests.codes.ok:
+        logger.error(f'Invalid request code: {response.status_code}')
+        raise Warning(f'Status_code is {response.status_code}')
     if response.headers['Content-Type'] == 'text/html':
         response.encoding = 'utf-8'
         return response.text
@@ -55,13 +58,10 @@ def extraction_data(url):
 
 
 def saving_data(data, file_name):
+    mode = 'w' if isinstance(data, str) else 'wb'
     try:
-        if isinstance(data, str):
-            with open(file_name, 'w') as fp:
-                fp.write(data)
-        else:
-            with open(file_name, 'wb') as fp:
-                fp.write(data)
+        with open(file_name, mode) as fp:
+            fp.write(data)
     except FileNotFoundError as err:
         logger.error(f'File {file_name} not saved: {err}')
         raise FileNotFoundError('File not saved')
@@ -71,8 +71,6 @@ def saving_data(data, file_name):
 def name_formation(addres, suffix='.html'):
     path_parse = urlparse(addres)
     path = os.path.splitext(path_parse.netloc + path_parse.path)[0]
-#    result = ''.join([sing if sing.isalnum() else sing.replace(sing, '-')
-#                      for sing in path]) + suffix
     result = re.sub(r'\W', '-', path) + suffix
     logger.debug(f'Convert the path {addres} to a name {result}')
     return result
