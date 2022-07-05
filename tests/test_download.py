@@ -1,4 +1,5 @@
 import tempfile
+import sys
 import os
 import pytest
 from page_loader.download import download
@@ -45,3 +46,9 @@ def test_download_exceptions():
     with tempfile.TemporaryDirectory() as temp:
         with pytest.raises(ConnectionError):
             download('', temp)
+
+
+def test_download_exceptions_status_code(make_request_exceptions):
+    with tempfile.TemporaryDirectory() as temp:
+        with pytest.raises(Warning):
+            download(addres, temp)
