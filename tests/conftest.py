@@ -57,7 +57,7 @@ def make_request(requests_mock,
 
 
 @pytest.fixture
-def new_dirict():
-    with tempfile.TemporaryDirectory() as tmp:
-        name_dir = tmp
-        yield name_dir
+def make_request_exceptions(requests_mock,
+                            read_file):
+    requests_mock.get('https://ru.hexlet.io/courses', text=read_file,
+                      headers={'content-type': 'all'}, status_code=404)
