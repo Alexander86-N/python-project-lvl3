@@ -14,9 +14,9 @@ def download(url, filepath):
     if not os.path.exists(dirname):
         try:
             os.mkdir(dirname)
-        except OSError:
-            logger.error('The dictory was not created.')
-            raise FileNotFoundError('The dictory was not created.')
+        except FileExistsError:
+            logger.error('Folder already exists.')
+            raise FileExistsError('Folder already exists.')
 
     logger.info(f'requested url: {url}')
     text_html = resource_extraction(url, dirname, name_dir)
