@@ -151,7 +151,7 @@ testing = ["pytest", "pytest-benchmark"]
 name = "progress"
 version = "1.6"
 description = "Easy to use progress bars"
-category = "dev"
+category = "main"
 optional = false
 python-versions = "*"
 
@@ -300,7 +300,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "db4ec5dfcfba5b9f00935f286b1d802430656c7037cee934648a0253b24b5a08"
+content-hash = "33a429e37090295a6b3bee7d701d9c6aa0d9835f93431d83332d973e2b05b9c6"
 
 [metadata.files]
 atomicwrites = [
