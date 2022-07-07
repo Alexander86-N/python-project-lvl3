@@ -1,8 +1,7 @@
 import os
-import logging
 from page_loader.data_extraction import resource_extraction
 from page_loader.data_extraction import saving_data, name_formation
-logger = logging.getLogger('page_loader.download')
+from page_loader.init_logger import logger
 
 
 def download(url, filepath):
@@ -19,8 +18,8 @@ def download(url, filepath):
             raise FileExistsError('Folder already exists.')
 
     logger.info(f'requested url: {url}')
-    text_html = resource_extraction(url, dirname, name_dir)
     logger.info(f'output path: {os.path.abspath(filepath)}')
     logger.info(f'write html file: {os.path.abspath(filename)}')
+    text_html = resource_extraction(url, dirname, name_dir)
     saving_data(text_html, filename)
     return os.path.abspath(filename)
