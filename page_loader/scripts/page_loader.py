@@ -1,22 +1,32 @@
 #!/usr/bin/env python
 
-import logging
-from page_loader.cli import make_cli
+import argparse
+import os
 from page_loader.download import download
-from page_loader.init_logger import init_logger
+from page_loader.init_logger import logger
 
 
 def main():
-    init_logger('page_loader')
-    logger = logging.getLogger('page_loader.page_loader')
-    arg_one, arg_two = make_cli()
+    parser = argparse.ArgumentParser(prog='page-loader',
+                                     description='Page loader')
+    parser.add_argument('url')
+    parser.add_argument('path')
+    parser.add_argument('-o', '--output', action="store_true",
+                        help='sets the program launch directory')
+    args = parser.parse_args()
+    if args.output:
+        url = args.url
+        path = os.getcwd()
+    else:
+        url = args.url
+        path = args.path
     try:
-        path = download(arg_one, arg_two)
+        result = download(url, path)
     except Exception as err:
         logger.error(err)
         exit(1)
     else:
-        print(path)
+        print(f'Page was downloaded as {result}')
         exit(0)
 
 
