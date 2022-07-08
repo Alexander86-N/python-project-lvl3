@@ -56,6 +56,6 @@ def test_download_exceptions_status_code(make_request_exceptions):
 
 def test_download_exception_dir():
     with tempfile.TemporaryDirectory() as temp:
+        os.mkdir(os.path.join(temp, name_dir))
         with pytest.raises(FileExistsError):
-#            os.mkdir(os.path.join(temp, name_dir))
-            download(addres, '')
+            download(addres, temp)
