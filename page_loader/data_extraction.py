@@ -12,33 +12,35 @@ TAGS = [{'tag': 'img', 'type': 'src'},
         {'tag': 'script', 'type': 'src'}]
 
 
-def resource_extraction(first_url, directory, name_dir):
-    data = extraction_data(first_url)
-    url_pars = urlparse(first_url)
+def resource_extraction(elementary_url, directory, name_dir):
+    """Downloads local resources of the main page.
+       All links are replaced with links pointing to files in the directory."""
+    data = extract_data_from_url(elementary_url)
+    url_pars = urlparse(elementary_url)
     logger.debug('Starting resource extraction.')
     soup = BeautifulSoup(data, 'html.parser')
-    links = defines_working_links(soup, first_url)
-    logger.debug(links)
+    links = defines_working_links(soup, elementary_url)
     progres = IncrementalBar('Downloading: ', max=len(links))
     for dataset, teg in links.items():
         addres = dataset.attrs[teg]
         value = urlparse(addres)
         logger.debug(f'Suitable link: {addres}')
         suffix = os.path.splitext(addres)[1]
-        name = name_formation(f'{url_pars.netloc}{addres}', suffix)
+        name = changes_the_name(f'{url_pars.netloc}{addres}', suffix)
         logger.debug(f'Resource name: {name}')
         dataset.attrs[teg] = f'{name_dir}/{name}'
         url = f'{url_pars.scheme}://{url_pars.netloc}{value.path}'
-        data_url = extraction_data(url)
+        data_url = extract_data_from_url(url)
         path = f'{directory}/{name}'
-        saving_data(data_url, path)
+        writes_data_file(data_url, path)
         progres.next()
     logger.debug('Resource extraction completed.')
     progres.finish()
     return soup.prettify()
 
 
-def extraction_data(url):
+def extract_data_from_url(url):
+    """Makes a request to the URL and returns its content."""
     try:
         response = requests.get(url)
         logger.debug(f'File {url} received.')
@@ -55,7 +57,8 @@ def extraction_data(url):
         return response.content
 
 
-def saving_data(data, file_name):
+def writes_data_file(data, file_name):
+    """Performs secure data writing to a file."""
     mode = 'w' if isinstance(data, str) else 'wb'
     try:
         with open(file_name, mode) as fp:
@@ -66,7 +69,8 @@ def saving_data(data, file_name):
     logger.debug(f'File {file_name} saved.')
 
 
-def name_formation(addres, suffix='.html'):
+def changes_the_name(addres, suffix='.html'):
+    """Generates the changed address of the resource."""
     path_parse = urlparse(addres)
     path = os.path.splitext(path_parse.netloc + path_parse.path)[0]
     result = re.sub(r'\W', '-', path) + suffix
@@ -75,6 +79,7 @@ def name_formation(addres, suffix='.html'):
 
 
 def defines_working_links(data, url):
+    """Generates a list of local and working links."""
     url_pars = urlparse(url)
     links = {}
     for tag in TAGS:
@@ -86,4 +91,5 @@ def defines_working_links(data, url):
                 continue
             else:
                 links[element] = tag['type']
+    logger.debug(f'List of working links: {links}')
     return links
