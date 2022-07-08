@@ -12,10 +12,9 @@ TAGS = [{'tag': 'img', 'type': 'src'},
         {'tag': 'script', 'type': 'src'}]
 
 
-def resource_extraction(elementary_url, directory, name_dir):
+def resource_extraction(elementary_url, data, directory, name_dir):
     """Downloads local resources of the main page.
        All links are replaced with links pointing to files in the directory."""
-    data = extract_data_from_url(elementary_url)
     url_pars = urlparse(elementary_url)
     logger.debug('Starting resource extraction.')
     soup = BeautifulSoup(data, 'html.parser')
@@ -44,9 +43,12 @@ def extract_data_from_url(url):
     try:
         response = requests.get(url)
         logger.debug(f'File {url} received.')
-    except requests.RequestException as err:
+    except requests.exceptions.ConnectionError as err:
         logger.error(f'Connection failed: {err}')
         raise ConnectionError('Connection failed')
+    except requests.exceptions.MissingSchema:
+        logger.error('Invalid URL '': No scheme supplied.')
+        raise ConnectionError('Invalid URL '': No scheme supplied.')
     if response.status_code != requests.codes.ok:
         logger.error(f'Invalid request code: {response.status_code}')
         raise Warning(f'Status_code is {response.status_code}')
