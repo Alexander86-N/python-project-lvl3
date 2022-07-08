@@ -31,6 +31,7 @@ def test_download_file_contents(make_request,
             css = f.read()
         assert read_correct_file == html
         assert read_file_css == css
+        assert os.path.exists(filename)
 
 
 def test_download_number_of_files(make_request):
@@ -52,3 +53,9 @@ def test_download_exceptions_status_code(make_request_exceptions):
     with tempfile.TemporaryDirectory() as temp:
         with pytest.raises(Warning):
             download(addres, temp)
+
+def test_download_exception_dir():
+    with tempfile.TemporaryDirectory() as temp:
+        with pytest.raises(FileExistsError):
+#            os.mkdir(os.path.join(temp, name_dir))
+            download(addres, '')
