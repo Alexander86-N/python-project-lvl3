@@ -2,6 +2,8 @@ import tempfile
 import sys
 import os
 import pytest
+import requests
+import requests_mock
 from page_loader.download import download
 
 
@@ -59,3 +61,14 @@ def test_download_exception_dir():
         os.mkdir(os.path.join(temp, name_dir))
         with pytest.raises(FileExistsError):
             download(addres, temp)
+
+
+def test_connection_error(requests_mock):
+    requests_mock.get(addres, exc=requests.exceptions.ConnectionError)
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        assert not os.listdir(tmpdirname)
+        print(os.listdir(tmpdirname))
+        with pytest.raises(Exception):
+            assert download(addres, tmpdirname)
+        print(os.listdir(tmpdirname))
+        assert not os.listdir(tmpdirname)
