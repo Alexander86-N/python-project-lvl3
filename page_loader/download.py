@@ -5,14 +5,13 @@ from page_loader.init_logger import logger
 
 
 def download(url, filepath):
-    """Downloads the page from the network to the specified directory. 
+    """Downloads the page from the network to the specified directory.
        Returns the full path to the downloaded file."""
     change_url = changes_the_name(url)
     filename = os.path.join(filepath, change_url)
 
     name_dir = changes_the_name(url, '_file')
     dirname = os.path.join(filepath, name_dir)
-#    if not os.path.exists(dirname):
     try:
         os.mkdir(dirname)
     except FileExistsError:
