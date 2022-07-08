@@ -3,7 +3,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
-from progress.bar import IncrementalBar
+from progress.bar import ShadyBar
 from page_loader.init_logger import logger
 
 
@@ -20,7 +20,7 @@ def resource_extraction(elementary_url, directory, name_dir):
     logger.debug('Starting resource extraction.')
     soup = BeautifulSoup(data, 'html.parser')
     links = defines_working_links(soup, elementary_url)
-    progres = IncrementalBar('Downloading: ', max=len(links))
+    progres = ShadyBar('Downloading: ', max=len(links))
     for dataset, teg in links.items():
         addres = dataset.attrs[teg]
         value = urlparse(addres)
