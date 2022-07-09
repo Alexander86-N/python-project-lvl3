@@ -2,6 +2,7 @@
 
 import argparse
 import os
+import sys
 from page_loader.download import download
 from page_loader.init_logger import logger
 
@@ -24,10 +25,10 @@ def main():
         result = download(url, path)
     except Exception as err:
         logger.error(err)
-        exit(1)
+        sys.exit(1)
     else:
         print(f'Page was downloaded as {result}')
-        exit(0)
+        sys.exit(0)
 
 
 if __name__ == '__main__':
