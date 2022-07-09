@@ -10,7 +10,7 @@ def download(url, filepath):
     change_url = changes_the_name(url)
     filename = os.path.join(filepath, change_url)
     data = extract_data_from_url(url)
-    name_dir = changes_the_name(url, '_file')
+    name_dir = changes_the_name(url, '_files')
     dirname = os.path.join(filepath, name_dir)
     try:
         os.mkdir(dirname)
