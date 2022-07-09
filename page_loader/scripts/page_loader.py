@@ -26,9 +26,8 @@ def main():
     except Exception as err:
         logger.error(err)
         sys.exit(1)
-    else:
-        print(f'Page was downloaded as {result}')
-        sys.exit(0)
+    print(f'Page was downloaded as {result}')
+    sys.exit(0)
 
 
 if __name__ == '__main__':
