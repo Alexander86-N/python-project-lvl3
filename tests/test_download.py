@@ -9,7 +9,7 @@ from page_loader.download import download
 
 correct_name = 'ru-hexlet-io-courses.html'
 addres = 'https://ru.hexlet.io/courses'
-name_dir = 'ru-hexlet-io-courses_file'
+name_dir = 'ru-hexlet-io-courses_files'
 file_name = 'ru-hexlet-io-assets-application.css'
 
 
