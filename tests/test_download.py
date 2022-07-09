@@ -39,19 +39,14 @@ def test_download_file_contents(make_request,
 def test_download_number_of_files(make_request):
     with tempfile.TemporaryDirectory() as temp:
         download(addres, temp)
-#        list_file = ['ru-hexlet-io-assets-application.css',
-#                     'ru-hexlet-io-assets-professions-nodejs.png',
-#                     'ru-hexlet-io-courses.html',
-#                     'ru-hexlet-io-packs-js-runtime.js']
-#        assert os.listdir(os.path.join(temp, name_dir)) == list_file
         assert len(os.listdir(temp)) == 2
         assert len(os.listdir(os.path.join(temp, name_dir))) == 4
 
 
-#def test_download_exceptions():
-#    with tempfile.TemporaryDirectory() as temp:
-#        with pytest.raises(ConnectionError):
-#            download('', temp)
+def test_download_exceptions():
+    with tempfile.TemporaryDirectory() as temp:
+        with pytest.raises(ConnectionError):
+            download('', temp)
 
 
 def test_download_exceptions_status_code(make_request_exceptions):
@@ -70,8 +65,6 @@ def test_connection_error(requests_mock):
     requests_mock.get(addres, exc=requests.exceptions.ConnectionError)
     with tempfile.TemporaryDirectory() as tmpdirname:
         assert not os.listdir(tmpdirname)
-        print(os.listdir(tmpdirname))
         with pytest.raises(Exception):
             assert download(addres, tmpdirname)
-        print(os.listdir(tmpdirname))
         assert not os.listdir(tmpdirname)
