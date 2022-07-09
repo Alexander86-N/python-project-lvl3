@@ -7,9 +7,9 @@ from progress.bar import ShadyBar
 from page_loader.init_logger import logger
 
 
-TAGS = [{'tag': 'img', 'type': 'src'},
-        {'tag': 'link', 'type': 'href'},
-        {'tag': 'script', 'type': 'src'}]
+TAGS = {'img': 'src',
+        'link': 'href',
+        'script': 'src'}
 
 
 def resource_extraction(elementary_url, data, directory, name_dir):
@@ -84,14 +84,19 @@ def defines_working_links(data, url):
     """Generates a list of local and working links."""
     url_pars = urlparse(url)
     links = {}
-    for tag in TAGS:
-        for element in data.find_all(tag['tag']):
-            addres = element.attrs.get(tag['type'])
-            value = urlparse(addres)
-            if not addres or value.netloc and value.netloc != url_pars.netloc:
+    for tag, attribute in TAGS.items():
+        for element in data.find_all(tag):
+            addres = element.attrs.get(attribute)
+#            value = urlparse(addres)
+#            if not addres or value.netloc and value.netloc != url_pars.netloc:
+            if re.search(url, addres) or re.search(url_pars.netloc, addres) or\
+               re.search(r'^/', addres):
+                links[element] = attribute
+#               logger.debug('There is no link to another domain or link.')
+#               continue
+            else:
                 logger.debug('There is no link to another domain or link.')
                 continue
-            else:
-                links[element] = tag['type']
+#                links[element] = tag['type']
     logger.debug(f'List of working links: {links}')
     return links
