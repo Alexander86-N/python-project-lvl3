@@ -52,11 +52,11 @@ def extract_data_from_url(url):
     if response.status_code != requests.codes.ok:
         logger.error(f'Invalid request code: {response.status_code}')
         raise Warning(f'Status_code is {response.status_code}')
-#    if response.headers['content-type'] == 'text/html':
-#        response.encoding = 'utf-8'
-#        return response.text
-#    else:
-    return response.content
+    if response.headers['content-type'] == 'text/html':
+        response.encoding = 'utf-8'
+        return response.text
+    else:
+        return response.content
 
 
 def writes_data_file(data, file_name):
@@ -88,16 +88,16 @@ def defines_working_links(data, url):
         for element in data.find_all(tag):
             addres = element.attrs.get(attribute)
             value = urlparse(addres)
-#            if not addres or value.netloc and value.netloc != url_pars.netloc:
+            if not addres or value.netloc and value.netloc != url_pars.netloc:
 #            if re.search(url, addres) or\
-            if re.search(url_pars.netloc, value.netloc) or\
-               re.search(r'^/', addres):
-                links[element] = attribute
-#               logger.debug('There is no link to another domain or link.')
-#               continue
+#            if re.search(url_pars.netloc, value.netloc) or\
+#               re.search(r'^/', addres):
+#                links[element] = attribute
+               logger.debug('There is no link to another domain or link.')
+               continue
             else:
-                logger.debug('There is no link to another domain or link.')
-                continue
-#                links[element] = tag['type']
+#                logger.debug('There is no link to another domain or link.')
+#                continue
+                links[element] = attribute
     logger.debug(f'List of working links: {links}')
     return links
