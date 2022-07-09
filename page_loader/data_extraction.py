@@ -52,7 +52,7 @@ def extract_data_from_url(url):
     if response.status_code != requests.codes.ok:
         logger.error(f'Invalid request code: {response.status_code}')
         raise Warning(f'Status_code is {response.status_code}')
-    logger.debug(response.headers['content-type'])
+#    logger.debug(response.headers['content-type'])
 #    if response.headers['content-type'] == 'text/html':
 #        response.encoding = 'utf-8'
 #        return response.text
