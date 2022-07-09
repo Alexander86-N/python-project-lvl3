@@ -4,9 +4,7 @@ import os
 import pytest
 import requests
 import requests_mock
-import subprocess
 from page_loader.download import download
-#from page_loader.scripts.page_loader import pade_loader
 
 
 correct_name = 'ru-hexlet-io-courses.html'
@@ -70,10 +68,3 @@ def test_connection_error(requests_mock):
         with pytest.raises(Exception):
             assert download(addres, tmpdirname)
         assert not os.listdir(tmpdirname)
-#
-#
-#
-#def test_page_loader(make_request):
-#    with tempfile.TemporaryDirectory() as temp:
-#        process = subprocess.run('download(addres, temp)')
-#        assert '' == process
