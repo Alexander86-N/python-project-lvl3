@@ -50,9 +50,9 @@ def extract_data_from_url(url):
     except requests.exceptions.ConnectionError as err:
         logger.error(f'Connection failed: {err}')
         raise ConnectionError('Connection failed')
-#    except requests.exceptions.MissingSchema:
-#        logger.error('Invalid URL '': No scheme supplied.')
-#        raise ConnectionError('Invalid URL '': No scheme supplied.')
+    except requests.exceptions.MissingSchema:
+        logger.error('Invalid URL '': No scheme supplied.')
+        raise ConnectionError('Invalid URL '': No scheme supplied.')
     if response.status_code != requests.codes.ok:
         logger.error(f'Invalid request code: {response.status_code}')
         raise Warning(f'Status_code is {response.status_code}')
