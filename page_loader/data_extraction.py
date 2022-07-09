@@ -89,8 +89,8 @@ def defines_working_links(data, url):
             addres = element.attrs.get(attribute)
             value = urlparse(addres)
 #            if not addres or value.netloc and value.netloc != url_pars.netloc:
-            if re.search(url, addres) or\
-               re.search(url_pars.netloc, value.netloc) or\
+#            if re.search(url, addres) or\
+            if re.search(url_pars.netloc, value.netloc) or\
                re.search(r'^/', addres):
                 links[element] = attribute
 #               logger.debug('There is no link to another domain or link.')
