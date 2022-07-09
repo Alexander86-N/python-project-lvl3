@@ -25,7 +25,11 @@ def resource_extraction(elementary_url, data, directory, name_dir):
         value = urlparse(addres)
         logger.debug(f'Suitable link: {addres}')
         suffix = os.path.splitext(addres)[1]
-        name = changes_the_name(f'{url_pars.netloc}{addres}', suffix)
+        logger.debug(f'Suffix: {suffix}')
+        if not suffix:
+            name = changes_the_name(f'{url_pars.netloc}{addres}')
+        else:
+            name = changes_the_name(f'{url_pars.netloc}{addres}', suffix)
         logger.debug(f'Resource name: {name}')
         dataset.attrs[teg] = f'{name_dir}/{name}'
         url = f'{url_pars.scheme}://{url_pars.netloc}{value.path}'
