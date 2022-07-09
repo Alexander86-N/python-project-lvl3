@@ -14,6 +14,7 @@ def download(url, filepath):
     dirname = os.path.join(filepath, name_dir)
     try:
         os.mkdir(dirname)
+        logger.debug(f'A directory has been created: {dirname}')
     except FileExistsError:
         logger.error('Folder already exists.')
         raise FileExistsError('Folder already exists.')
