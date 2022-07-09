@@ -25,7 +25,7 @@ def main():
         result = download(url, path)
     except Exception as err:
         logger.error(err)
-        sys.exit(0)
+        sys.exit(1)
     else:
         print(f'Page was downloaded as {result}')
         sys.exit(0)
