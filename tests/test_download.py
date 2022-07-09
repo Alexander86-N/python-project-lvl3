@@ -43,6 +43,8 @@ def test_download_number_of_files(make_request):
                      'ru-hexlet-io-assets-professions-nodejs.png',
                      'ru-hexlet-io-packs-js-runtime.js']
         assert os.listdir(os.path.join(temp, name_dir)) == list_file
+        assert len(os.listdir(temp)) == 2
+        assert len(os.listdir(os.path.join(temp, name_dir))) == 3
 
 
 def test_download_exceptions():
