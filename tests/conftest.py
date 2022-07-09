@@ -51,9 +51,11 @@ def make_request(requests_mock,
                       content=read_file_css, headers={'content-type': 'all'})
     requests_mock.get('https://ru.hexlet.io/packs/js/runtime.js',
                       content=read_file_js, headers={'content-type': 'all'})
+    requests_mock.get('https://ru.hexlet.io/courses', text=read_file,
+                      headers={'content-type': 'all'})
     yield
 
-    assert requests_mock.call_count == 4
+    assert requests_mock.call_count == 5
 
 
 @pytest.fixture
