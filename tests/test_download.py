@@ -1,12 +1,9 @@
 import tempfile
-import sys
 import os
 import pytest
 import requests
 import subprocess
-import requests_mock
 from page_loader.download import download
-from page_loader.scripts.page_loader import main
 
 
 correct_name = 'ru-hexlet-io-courses.html'
@@ -55,6 +52,7 @@ def test_download_exceptions_status_code(make_request_exceptions):
     with tempfile.TemporaryDirectory() as temp:
         with pytest.raises(Warning):
             download(addres, temp)
+
 
 def test_download_exception_dir():
     with tempfile.TemporaryDirectory() as temp:
