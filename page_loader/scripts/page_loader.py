@@ -17,7 +17,7 @@ def main():
     parser.add_argument('url')
     args = parser.parse_args()
     try:
-        result = download(args.path, args.url)
+        result = download(args.url, args.path)
     except Exception as err:
         logger.error(err)
         sys.exit(1)
