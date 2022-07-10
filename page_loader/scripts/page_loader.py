@@ -10,19 +10,14 @@ from page_loader.init_logger import logger
 def main():
     parser = argparse.ArgumentParser(prog='page-loader',
                                      description='Page loader')
-    parser.add_argument('url')
-    parser.add_argument('path')
-    parser.add_argument('-o', '--output', action="store_true",
+    parser.add_argument('-o', '--output', action="store",
+                        dest='path', metavar='OUTPUT',
+                        default=os.getcwd(),
                         help='sets the program launch directory')
+    parser.add_argument('url')
     args = parser.parse_args()
-    if args.output:
-        url = args.url
-        path = os.getcwd()
-    else:
-        url = args.url
-        path = args.path
     try:
-        result = download(url, path)
+        result = download(args.path, args.url)
     except Exception as err:
         logger.error(err)
         sys.exit(1)
