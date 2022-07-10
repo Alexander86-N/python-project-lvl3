@@ -18,7 +18,7 @@ file_name = 'ru-hexlet-io-assets-application.css'
 def test_download_result(make_request):
     with tempfile.TemporaryDirectory() as temp:
         random_path = os.path.join(temp, correct_name)
-        result = download(temp, addres)
+        result = download(addres, temp)
         assert random_path == result
         assert os.path.exists(os.path.join(temp, name_dir))
 
@@ -27,7 +27,7 @@ def test_download_file_contents(make_request,
                                 read_file_css,
                                 read_correct_file):
     with tempfile.TemporaryDirectory() as temp:
-        result = download(temp, addres)
+        result = download(addres, temp)
         filename = os.path.join(os.path.join(temp, name_dir), file_name)
         with open(result) as f:
             html = f.read()
@@ -40,7 +40,7 @@ def test_download_file_contents(make_request,
 
 def test_download_number_of_files(make_request):
     with tempfile.TemporaryDirectory() as temp:
-        download(temp, addres)
+        download(addres, temp)
         assert len(os.listdir(temp)) == 2
         assert len(os.listdir(os.path.join(temp, name_dir))) == 4
 
@@ -48,19 +48,19 @@ def test_download_number_of_files(make_request):
 def test_download_exceptions():
     with tempfile.TemporaryDirectory() as temp:
         with pytest.raises(ConnectionError):
-            download(temp, '')
+            download('', temp)
 
 
 def test_download_exceptions_status_code(make_request_exceptions):
     with tempfile.TemporaryDirectory() as temp:
         with pytest.raises(Warning):
-            download(temp, addres)
+            download(addres, temp)
 
 def test_download_exception_dir():
     with tempfile.TemporaryDirectory() as temp:
         os.mkdir(os.path.join(temp, name_dir))
         with pytest.raises(FileExistsError):
-            download(temp, addres)
+            download(addres, temp)
 
 
 def test_connection_error(requests_mock):
@@ -68,7 +68,7 @@ def test_connection_error(requests_mock):
     with tempfile.TemporaryDirectory() as tmpdirname:
         assert not os.listdir(tmpdirname)
         with pytest.raises(Exception):
-            assert download(tmpdirname, addres)
+            assert download(addres, tmpdirname)
         assert not os.listdir(tmpdirname)
 
 
@@ -79,4 +79,3 @@ def test_page_loader():
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         assert result.returncode == 0
-#        assert '' == result.stdout
