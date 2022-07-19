@@ -3,11 +3,14 @@
 import argparse
 import os
 import sys
+import logging
 from page_loader.download import download
-from page_loader.init_logger import logger
+from page_loader.logging import init_logger
 
 
 def main():
+    init_logger()
+    logger = logging.getLogger(__name__)
     parser = argparse.ArgumentParser(prog='page-loader',
                                      description='Page loader')
     parser.add_argument('-o', '--output', action="store",
