@@ -1,7 +1,11 @@
 import os
-from page_loader.data_extraction import resource_extraction, changes_the_name
-from page_loader.data_extraction import writes_data_file, extract_data_from_url
-from page_loader.init_logger import logger
+import logging
+from page_loader.work_with_html_page import resource_extraction
+from page_loader.work_with_file_system import writes_data_file
+from page_loader.work_with_file_system import creating_directory
+from page_loader.working_with_url import extract_data_from_url
+from page_loader.working_with_url import changes_the_name
+logger = logging.getLogger(__name__)
 
 
 def download(url, filepath=os.getcwd()):
@@ -12,13 +16,7 @@ def download(url, filepath=os.getcwd()):
     data = extract_data_from_url(url)
     name_dir = changes_the_name(url, '_files')
     dirname = os.path.join(filepath, name_dir)
-    try:
-        os.mkdir(dirname)
-        logger.debug(f'A directory has been created: {dirname}')
-    except FileExistsError:
-        logger.error('Folder already exists.')
-        raise FileExistsError('Folder already exists.')
-
+    creating_directory(dirname)
     logger.info(f'requested url: {url}')
     logger.info(f'output path: {os.path.abspath(filepath)}')
     logger.info(f'write html file: {os.path.abspath(filename)}')
