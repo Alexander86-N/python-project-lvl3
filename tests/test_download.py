@@ -10,9 +10,20 @@ correct_name = 'ru-hexlet-io-courses.html'
 addres = 'https://ru.hexlet.io/courses'
 name_dir = 'ru-hexlet-io-courses_files'
 file_name = 'ru-hexlet-io-assets-application.css'
+IMG = 'https://ru.hexlet.io/assets/professions/nodejs.png'
+CSS = 'https://ru.hexlet.io/assets/application.css'
+JS = 'https://ru.hexlet.io/packs/js/runtime.js'
 
 
-def test_download_result(make_request):
+def test_download_result(requests_mock,
+                         read_file,
+                         read_file_css,
+                         read_file_js,
+                         read_file_img):
+    requests_mock.get(addres, text=read_file)
+    requests_mock.get(IMG, content=read_file_img)
+    requests_mock.get(CSS, content=read_file_css)
+    requests_mock.get(JS, content=read_file_js)
     with tempfile.TemporaryDirectory() as temp:
         random_path = os.path.join(temp, correct_name)
         result = download(addres, temp)
@@ -20,9 +31,16 @@ def test_download_result(make_request):
         assert os.path.exists(os.path.join(temp, name_dir))
 
 
-def test_download_file_contents(make_request,
+def test_download_file_contents(requests_mock,
+                                read_file,
+                                read_correct_file,
                                 read_file_css,
-                                read_correct_file):
+                                read_file_js,
+                                read_file_img):
+    requests_mock.get(addres, text=read_file)
+    requests_mock.get(IMG, content=read_file_img)
+    requests_mock.get(CSS, content=read_file_css)
+    requests_mock.get(JS, content=read_file_js)
     with tempfile.TemporaryDirectory() as temp:
         result = download(addres, temp)
         filename = os.path.join(os.path.join(temp, name_dir), file_name)
@@ -35,7 +53,15 @@ def test_download_file_contents(make_request,
         assert os.path.exists(filename)
 
 
-def test_download_number_of_files(make_request):
+def test_download_number_of_files(requests_mock,
+                                  read_file,
+                                  read_file_css,
+                                  read_file_js,
+                                  read_file_img):
+    requests_mock.get(addres, text=read_file)
+    requests_mock.get(IMG, content=read_file_img)
+    requests_mock.get(CSS, content=read_file_css)
+    requests_mock.get(JS, content=read_file_js)
     with tempfile.TemporaryDirectory() as temp:
         download(addres, temp)
         assert len(os.listdir(temp)) == 2
@@ -48,7 +74,8 @@ def test_download_exceptions():
             download('', temp)
 
 
-def test_download_exceptions_status_code(make_request_exceptions):
+def test_download_exceptions_status_code(requests_mock, read_file):
+    requests_mock.get(addres, text=read_file, status_code=404)
     with tempfile.TemporaryDirectory() as temp:
         with pytest.raises(Warning):
             download(addres, temp)
