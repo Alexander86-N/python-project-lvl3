@@ -2,9 +2,7 @@ import os
 import logging
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse
-from progress.bar import ShadyBar
-from page_loader.working_with_url import extract_data_from_url, changes_the_name
-from page_loader.work_with_file_system import writes_data_file
+from page_loader.url import changes_the_name
 logger = logging.getLogger(__name__)
 
 
@@ -14,13 +12,13 @@ TAGS = {'img': 'src',
 
 
 def resource_extraction(elementary_url, data, directory, name_dir):
-    """Downloads local resources of the main page.
+    """Collects local resources of the main page in the list.
        All links are replaced with links pointing to files in the directory."""
+    resours = []
     url_pars = urlparse(elementary_url)
     logger.debug('Starting resource extraction.')
     soup = BeautifulSoup(data, 'html.parser')
     links = defines_working_links(soup, elementary_url)
-    progres = ShadyBar('Downloading: ', max=len(links))
     for dataset, teg in links.items():
         addres = dataset.attrs[teg]
         value = urlparse(addres)
@@ -34,13 +32,11 @@ def resource_extraction(elementary_url, data, directory, name_dir):
         logger.debug(f'Resource name: {name}')
         dataset.attrs[teg] = f'{name_dir}/{name}'
         url = f'{url_pars.scheme}://{url_pars.netloc}{value.path}'
-        data_url = extract_data_from_url(url)
         path = f'{directory}/{name}'
-        writes_data_file(data_url, path)
-        progres.next()
+        resours.append({'url': url,
+                        'path': path})
     logger.debug('Resource extraction completed.')
-    progres.finish()
-    return soup.prettify()
+    return resours, soup.prettify()
 
 
 def defines_working_links(data, url):
