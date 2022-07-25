@@ -77,7 +77,7 @@ def test_download_exceptions():
 def test_download_exceptions_status_code(requests_mock, read_file):
     requests_mock.get(addres, text=read_file, status_code=404)
     with tempfile.TemporaryDirectory() as temp:
-        with pytest.raises(Warning):
+        with pytest.raises(ConnectionError):
             download(addres, temp)
 
 
