@@ -3,7 +3,10 @@ import os
 import pytest
 import requests
 import subprocess
-from page_loader.download import download
+from page_loader.download import download, get_data
+from page_loader.url import to_directory, to_filename
+from page_loader.html import get_resources
+from page_loader.storage import save
 
 
 correct_name = 'ru-hexlet-io-courses.html'
@@ -104,3 +107,61 @@ def test_page_loader():
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         assert result.returncode == 0
+
+
+@pytest.mark.parametrize('link, expected', [
+    ('https://ru.hexlet.io/courses',
+     'ru-hexlet-io-courses.html'),
+    ('https://ru.hexlet.io/assets/professions/nodejs.png',
+     'ru-hexlet-io-assets-professions-nodejs.png'),
+    ('https://ru.hexlet.io/assets/application.css.js',
+     'ru-hexlet-io-assets-application-css.js')])
+def test_to_filename(link, expected):
+    result = to_filename(link)
+    assert result == expected
+
+
+@pytest.mark.parametrize('link, expected', [
+    ('https://ru.hexlet.io/courses',
+     'ru-hexlet-io-courses_files'),
+    ('https://ru.hexlet.io/assets/professions/nodejs.png',
+     'ru-hexlet-io-assets-professions-nodejs_files'),
+    ('https://ru.hexlet.io/assets/application.css.js',
+     'ru-hexlet-io-assets-application-css_files')])
+def test_to_directory(link, expected):
+    result = to_directory(link)
+    assert result == expected
+
+
+def test_get_resours(requests_mock,
+                     read_file,
+                     read_correct_file):
+    requests_mock.get(addres, text=read_file)
+    response = get_data(addres)
+    resources, html = get_resources(addres, response, name_dir)
+    result = [{'name': 'ru-hexlet-io-assets-professions-nodejs.png',
+               'url': 'https://ru.hexlet.io/assets/professions/nodejs.png'},
+              {'name': 'ru-hexlet-io-assets-application.css',
+               'url': 'https://ru.hexlet.io/assets/application.css'},
+              {'name': 'ru-hexlet-io-courses.html',
+               'url': 'https://ru.hexlet.io/courses'},
+              {'name': 'ru-hexlet-io-packs-js-runtime.js',
+               'url': 'https://ru.hexlet.io/packs/js/runtime.js'}]
+    assert html == read_correct_file
+    assert resources == result
+
+
+def test_save(read_correct_file, read_file_img):
+    with tempfile.TemporaryDirectory() as temp:
+        path_html = os.path.join(temp, 'one.html')
+        path_img = os.path.join(temp, 'image.png')
+        save(read_correct_file, path_html)
+        save(read_file_img, path_img)
+        with open(path_html) as f:
+            html = f.read()
+        with open(path_img, 'rb') as f:
+            img = f.read()
+        assert read_correct_file == html
+        assert read_file_img == img
+        assert os.path.exists(path_html)
+        assert os.path.exists(path_img)
